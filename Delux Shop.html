@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delux Shop Portugal — Tudo. Fácil. Feito.</title>
+  <meta name="description" content="Delux Shop Portugal — serviços e produtos: limpeza, massagens, tarefas, personalizações e 3D. 1 € = 12 000 $ Delux." />
+  <style>
+    :root{
+      --bg:#0f1226; --card:#121633cc; --card-solid:#161a3a; --text:#e8ebff; --muted:#b6b9d9;
+      --primary:#7c5cff; --accent:#00e0ff; --ok:#22c55e; --warn:#ffb703; --radius:18px; --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial; color:var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, #1a1f45 0, transparent 60%),
+                  radial-gradient(800px 600px at 120% 20%, #0a3750 0, transparent 50%),
+                  var(--bg);
+      overflow-x:hidden;}
+
+    /* NAV */
+    .nav{position:sticky; top:0; z-index:50; backdrop-filter: blur(10px); background: linear-gradient(180deg, #0b0e22cc, #0b0e2200); border-bottom:1px solid #2a2f66}
+    .nav-inner{max-width:1200px; margin:auto; display:flex; align-items:center; gap:16px; padding:12px 20px}
+    .logo{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); font-weight:800}
+    .logo-badge{width:36px;height:36px; border-radius:10px; background: conic-gradient(from 0deg, var(--primary), var(--accent), #3de0a8, var(--primary)); box-shadow:0 8px 24px rgba(124,92,255,.35); display:grid; place-items:center; font-weight:900}
+    .grow{flex:1}
+    .nav a{color:var(--muted); text-decoration:none; font-weight:700}
+    .nav a:hover{color:#fff}
+    .btn{appearance:none; border:none; border-radius:14px; padding:10px 16px; font-weight:800; cursor:pointer; transition:.25s transform, .25s box-shadow}
+    .btn-primary{color:#0a0f2b; background:linear-gradient(135deg, var(--accent), var(--primary)); box-shadow:0 10px 30px rgba(0,224,255,.25)}
+    .btn-primary:hover{transform:translateY(-2px)}
+    .btn-ghost{background:transparent; border:1px solid #3a3f78; color:#e2e6ff}
+    .btn-add{background:#1fe4b7; color:#052a2a}
+
+    /* HERO */
+    .hero{position:relative; min-height:66vh; display:grid; place-items:center; text-align:center; overflow:hidden}
+    .hero h1{font-size: clamp(2rem, 5vw, 3.6rem); margin:0 0 10px; line-height:1.05; background:linear-gradient(120deg, #fff, #c6d3ff, #8adfff, #fff); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .hero p{margin:0 auto 22px; max-width:720px; color:var(--muted); font-size: clamp(1rem, 2.5vw, 1.25rem)}
+    .hero-cta{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+    .orb{position:absolute; filter: blur(60px); opacity:.35; mix-blend:screen}
+    .orb.a{width:420px;height:420px; background:radial-gradient(circle at 30% 30%, #7c5cff, transparent 60%); left:-120px; top:-80px}
+    .orb.b{width:520px;height:520px; background:radial-gradient(circle at 60% 40%, #00e0ff, transparent 60%); right:-180px; top:-120px}
+
+    /* SECTIONS */
+    .section{max-width:1200px; margin:60px auto; padding:0 20px}
+    .section h2{font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin:0 0 18px}
+    .muted{color:var(--muted)}
+
+    /* GRID */
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
+    .card{position:relative; border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); overflow:hidden; border:1px solid #2a2f66}
+    .card::before{content:""; position:absolute; inset:0; background: linear-gradient(180deg, transparent, rgba(124,92,255,.07)); pointer-events:none}
+    .card-media{height:160px; background:#0e1334; display:grid; place-items:center}
+    .art{width:100%; height:100%}
+    .card-body{padding:16px}
+    .title{font-weight:900; letter-spacing:.2px}
+    .price{display:flex; align-items:center; gap:8px; margin:8px 0; font-weight:900; color:#d9ffe3}
+    .price .eur{color:var(--ok)}
+    .price small{color:var(--muted); font-weight:700}
+    .unit{color:var(--muted); font-size:.95rem}
+    .actions{display:flex; gap:10px; margin-top:12px}
+
+    /* CART */
+    .cart{position:fixed; right:16px; bottom:16px; z-index:60; width:min(440px, 92vw); border-radius:18px; border:1px solid #3a3f78; background: rgba(13, 17, 48, .78); backdrop-filter: blur(12px); box-shadow: var(--shadow)}
+    .cart header{display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #2a2f66}
+    .cart header h3{margin:0; font-size:1rem}
+    .cart .items{max-height:300px; overflow:auto}
+    .cart .row{display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; padding:10px 14px; border-bottom:1px dashed #2a2f66}
+    .cart .qty{display:flex; align-items:center; gap:6px}
+    .cart .qty button{width:28px; height:28px; border-radius:8px; background:#2a2f66; color:#fff; border:none; cursor:pointer}
+    .cart .totals{padding:12px 14px; display:grid; gap:6px; border-top:1px solid #2a2f66}
+    .totals .line{display:flex; justify-content:space-between}
+    .checkout{display:grid; gap:10px; padding:12px 14px}
+
+    /* PayPal Box */
+    .paypal-box{display:grid; gap:8px; border:1px solid #2a2f66; border-radius:14px; padding:12px; background:rgba(20,24,60,.75)}
+    .paypal-link{display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; padding:12px; border-radius:12px; background:#ffc439; color:#171717; font-weight:900}
+    .paypal-link:hover{filter:brightness(1.05); transform:translateY(-1px)}
+
+    /* FAQ */
+    details{background:var(--card); border:1px solid #2a2f66; border-radius:14px; padding:12px 14px}
+    details+details{margin-top:10px}
+    summary{cursor:pointer; font-weight:800}
+
+    /* reveal */
+    .reveal{opacity:0; transform: translateY(14px); transition:.6s ease}
+    .reveal.show{opacity:1; transform:none}
+
+    footer{margin:80px 0 40px; text-align:center; color:var(--muted)}
+    @media (prefers-reduced-motion: reduce){.reveal{transition:none}.btn:hover{transform:none}}
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Navegação principal">
+    <div class="nav-inner">
+      <a class="logo" href="#top" aria-label="Delux Shop Portugal"><span class="logo-badge">D$</span><span>Delux Shop Portugal</span></a>
+      <div class="grow"></div>
+      <a href="#servicos">Serviços</a>
+      <a href="#massagens">Massagens</a>
+      <a href="#outros">Outros</a>
+      <a href="#faq">FAQ</a>
+      <button class="btn btn-primary" onclick="scrollToId('servicos')">Reservar</button>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="orb a" aria-hidden="true"></div>
+      <div class="orb b" aria-hidden="true"></div>
+      <div class="reveal show">
+        <h1 id="hero-title">Tudo. Fácil. Feito.</h1>
+        <p>Serviços acessíveis e transparentes com pontos Delux ($): por cada 1&nbsp;€ recebes <strong>12&nbsp;000&nbsp;$</strong>. Escolhe abaixo e adiciona ao carrinho.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary" onclick="scrollToId('servicos')">Explorar serviços</button>
+          <button class="btn btn-ghost" onclick="scrollToId('faq')">Como funciona?</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Serviços: Limpeza/Jardim/Carro -->
+    <section id="servicos" class="section">
+      <h2>Serviços</h2>
+      <p class="muted">Preços por hora, pontos calculados automaticamente.</p>
+      <div class="grid" id="grid-servicos">
+
+        <!-- Lavar a Casa -->
+        <article class="card reveal" data-id="lavar-casa" data-nome="Lavar a Casa (aspirar, limpar vidros, arrumar)" data-preco="10" data-unidade="/hora">
+          <div class="card-media" aria-hidden="true">
+            <svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Lavar a Casa">
+              <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#00e0ff"/></linearGradient></defs>
+              <rect width="600" height="220" fill="#091032"/>
+              <circle cx="80" cy="60" r="140" fill="url(#g1)" opacity=".35"/>
+              <rect x="0" y="165" width="600" height="55" fill="#0d183e"/>
+              <g fill="#9fd8ff"><rect x="80" y="130" width="14" height="70" rx="4"/><rect x="86" y="110" width="120" height="10" rx="5"/></g>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="title">Lavar a Casa</div>
+            <div class="price"><span class="eur">10&nbsp;€</span><small></small></div>
+            <div class="unit">Preço por hora</div>
+            <div class="actions"><button class="btn btn-add" onclick="add('lavar-casa')">Adicionar</button><button class="btn btn-ghost" onclick="info('Lavar a Casa')">Detalhes</button></div>
+          </div>
+        </article>
+
+        <!-- Lavar carro -->
+        <article class="card reveal" data-id="lavar-carro" data-nome="Lavar carro" data-preco="5" data-unidade="/hora">
+          <div class="card-media" aria-hidden="true">
+            <svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Lavar carro">
+              <rect width="600" height="220" fill="#0b122f"/>
+              <rect x="60" y="120" width="300" height="24" rx="8" fill="#4cc9f0"/>
+              <rect x="100" y="80" width="140" height="30" rx="6" fill="#38bdf8"/>
+              <circle cx="120" cy="160" r="14" fill="#94a3b8"/>
+              <circle cx="320" cy="160" r="14" fill="#94a3b8"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="title">Lavar carro</div>
+            <div class="price"><span class="eur">5&nbsp;€</span><small></small></div>
+            <div class="unit">Preço por hora</div>
+            <div class="actions"><button class="btn btn-add" onclick="add('lavar-carro')">Adicionar</button><button class="btn btn-ghost" onclick="info('Lavar carro')">Detalhes</button></div>
+          </div>
+        </article>
+
+        <!-- Regar Jardim -->
+        <article class="card reveal" data-id="regar-jardim" data-nome="Regar Jardim" data-preco="7" data-unidade="/hora">
+          <div class="card-media" aria-hidden="true">
+            <svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Regar Jardim">
+              <defs><linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#3de0a8"/></linearGradient></defs>
+              <rect width="600" height="220" fill="#08102d"/>
+              <rect x="40" y="40" width="520" height="140" fill="#0b1b46" stroke="#4fc4ff" stroke-width="2"/>
+              <rect x="50" y="50" width="140" height="120" fill="url(#g2)" opacity=".2"/>
+              <rect x="210" y="50" width="140" height="120" fill="url(#g2)" opacity=".2"/>
+              <rect x="370" y="50" width="140" height="120" fill="url(#g2)" opacity=".2"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <div class="title">Regar Jardim</div>
+            <div class="price"><span class="eur">7&nbsp;€</span><small></small></div>
+            <div class="unit">Preço por hora</div>
+            <div class="actions"><button class="btn btn-add" onclick="add('regar-jardim')">Adicionar</button><button class="btn btn-ghost" onclick="info('Regar Jardim')">Detalhes</button></div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Massagens -->
+    <section id="massagens" class="section">
+      <h2>Massagens</h2>
+      <div class="grid">
+        <article class="card reveal" data-id="massagem-pes" data-nome="Massagens nos pés" data-preco="10" data-unidade="/hora">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Massagens nos pés"><rect width="600" height="220" fill="#06233a"/><rect y="130" width="600" height="90" fill="#f6bd60" opacity=".25"/><circle cx="520" cy="60" r="26" fill="#ffd166"/><rect x="60" y="150" width="160" height="10" rx="5" fill="#bde0fe"/></svg></div>
+          <div class="card-body"><div class="title">Massagens nos pés</div><div class="price"><span class="eur">10&nbsp;€</span><small></small></div><div class="unit">Preço por hora</div><div class="actions"><button class="btn btn-add" onclick="add('massagem-pes')">Adicionar</button><button class="btn btn-ghost" onclick="info('Massagens nos pés')">Detalhes</button></div></div>
+        </article>
+        <article class="card reveal" data-id="massagem-cabeca" data-nome="Massagem na cabeça" data-preco="12" data-unidade="/hora">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Massagem na cabeça"><rect width="600" height="220" fill="#0a0f2b"/><circle cx="120" cy="100" r="70" fill="#7c5cff" opacity=".3"/><circle cx="520" cy="160" r="40" fill="#00e0ff" opacity=".2"/></svg></div>
+          <div class="card-body"><div class="title">Massagem na cabeça</div><div class="price"><span class="eur">12&nbsp;€</span><small></small></div><div class="unit">Preço por hora</div><div class="actions"><button class="btn btn-add" onclick="add('massagem-cabeca')">Adicionar</button><button class="btn btn-ghost" onclick="info('Massagem na cabeça')">Detalhes</button></div></div>
+        </article>
+        <article class="card reveal" data-id="massagem-costas" data-nome="Massagem nas costas" data-preco="15" data-unidade="/hora">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Massagem nas costas"><defs><linearGradient id="g4" x1="0" x2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#00e0ff"/></linearGradient></defs><rect width="600" height="220" fill="#071028"/><text x="50" y="120" font-size="40" fill="url(#g4)" font-family="Segoe UI, Arial" font-weight="900">Relax</text></svg></div>
+          <div class="card-body"><div class="title">Massagem nas costas</div><div class="price"><span class="eur">15&nbsp;€</span><small></small></div><div class="unit">Preço por hora</div><div class="actions"><button class="btn btn-add" onclick="add('massagem-costas')">Adicionar</button><button class="btn btn-ghost" onclick="info('Massagem nas costas')">Detalhes</button></div></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Outros serviços / Produtos -->
+    <section id="outros" class="section">
+      <h2>Outros</h2>
+      <div class="grid">
+        <article class="card reveal" data-id="tarefas-diversas" data-nome="Ajudar em tarefas diversas" data-preco="5" data-unidade="/hora">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Tarefas diversas"><rect width="600" height="220" fill="#0b1334"/><circle cx="120" cy="100" r="80" fill="#00e0ff" opacity=".25"/><rect x="260" y="90" width="220" height="20" rx="10" fill="#9bd6ff"/></svg></div>
+          <div class="card-body"><div class="title">Ajudar em tarefas diversas</div><div class="price"><span class="eur">5&nbsp;€</span><small></small></div><div class="unit">Preço por hora</div><div class="actions"><button class="btn btn-add" onclick="add('tarefas-diversas')">Adicionar</button><button class="btn btn-ghost" onclick="info('Ajudar em tarefas diversas')">Detalhes</button></div></div>
+        </article>
+        <article class="card reveal" data-id="personalizacoes-3d" data-nome="Pinturas, Personalizações e impressões 3D" data-preco="2" data-unidade="/peça">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Personalizações e 3D"><rect width="600" height="220" fill="#0c1534"/><rect x="80" y="120" width="90" height="60" rx="8" fill="#f59e0b"/><rect x="190" y="110" width="110" height="70" rx="10" fill="#fbbf24"/><rect x="320" y="100" width="120" height="80" rx="12" fill="#fde68a"/></svg></div>
+          <div class="card-body"><div class="title">Pinturas, Personalizações e impressões 3D</div><div class="price"><span class="eur">2&nbsp;€</span><small></small></div><div class="unit">Preço por peça/item</div><div class="actions"><button class="btn btn-add" onclick="add('personalizacoes-3d')">Adicionar</button><button class="btn btn-ghost" onclick="info('Pinturas, Personalizações e impressões 3D')">Detalhes</button></div></div>
+        </article>
+        <article class="card reveal" data-id="arrumar-quarto" data-nome="Arrumar/organizar limpeza geral/quarto" data-preco="1.5" data-unidade="/tarefa">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Arrumar e organizar"><rect width="600" height="220" fill="#0b122f"/><rect x="70" y="90" width="460" height="80" rx="14" fill="#4f46e5" opacity=".35"/><rect x="100" y="120" width="140" height="20" rx="6" fill="#a5b4fc"/></svg></div>
+          <div class="card-body"><div class="title">Arrumar, organizar, limpeza geral/quarto</div><div class="price"><span class="eur">1,50&nbsp;€</span><small></small></div><div class="unit">Preço por tarefa</div><div class="actions"><button class="btn btn-add" onclick="add('arrumar-quarto')">Adicionar</button><button class="btn btn-ghost" onclick="info('Arrumar, organizar, limpeza geral/quarto')">Detalhes</button></div></div>
+        </article>
+        <article class="card reveal" data-id="autocolante-delux" data-nome="Autocolante Personalizado Delux Shop" data-preco="1" data-unidade="/unidade">
+          <div class="card-media"><svg class="art" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" aria-label="Autocolante Delux Shop"><defs><linearGradient id="g5" x1="0" x2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#7c5cff"/></linearGradient></defs><rect width="600" height="220" fill="#071028"/><text x="50" y="120" font-size="36" fill="url(#g5)" font-family="Segoe UI, Arial" font-weight="900">Delux Shop</text></svg></div>
+          <div class="card-body"><div class="title">Autocolante Personalizado Delux Shop</div><div class="price"><span class="eur">1&nbsp;€</span><small></small></div><div class="unit">Preço por unidade</div><div class="actions"><button class="btn btn-add" onclick="add('autocolante-delux')">Adicionar</button><button class="btn btn-ghost" onclick="info('Autocolante Personalizado Delux Shop')">Detalhes</button></div></div>
+        </article>
+      </div>
+
+      <p class="muted" style="margin-top:16px">Se precisar de algo que não aparece no nosso catálogo, fale connosco via email <a href="mailto:miguelbraztab@gmail.com">miguelbraztab@gmail.com</a> ou WhatsApp <a href="https://wa.me/351969356582" target="_blank" rel="noopener">+351&nbsp;969&nbsp;356&nbsp;582</a>.</p>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <h2>Perguntas frequentes</h2>
+      <details class="reveal"><summary>Como funcionam os pontos Delux ($)?</summary>
+        <p>Cada euro gasto gera <strong>12&nbsp;000&nbsp;$</strong> Delux. Ex.: 10&nbsp;€ → 120&nbsp;000&nbsp;$ Delux. Os pontos aparecem ao lado do preço e no carrinho.</p>
+      </details>
+      <details class="reveal"><summary>Como pago?</summary>
+        <p>Podes finalizar via <strong>PayPal</strong> no carrinho. Ao clicar, és redirecionado para <code>paypal.me/MiguelBraz10</code>.</p>
+      </details>
+    </section>
+
+    <footer class="section" aria-label="Rodapé">
+      <p>© <span id="ano"></span> Delux Shop Portugal — "Tudo. Fácil. Feito."</p>
+      <p class="muted">Site estático, responsivo e sem dependências externas. Imagens SVG locais (carregam 100%).</p>
+    </footer>
+  </main>
+
+  <!-- CARRINHO -->
+  <aside class="cart" aria-live="polite" aria-label="Carrinho de compras">
+    <header>
+      <h3>O teu carrinho</h3>
+      <button class="btn btn-ghost" onclick="clearCart()" title="Limpar carrinho">Limpar</button>
+    </header>
+    <div class="items" id="cartItems"></div>
+    <div class="totals">
+      <div class="line"><span>Total (€)</span><strong id="totalEur">0,00&nbsp;€</strong></div>
+      <div class="line"><span>Total (Delux $)</span><strong id="totalPts">0&nbsp;$</strong></div>
+    </div>
+    <div class="checkout">
+      <div class="paypal-box">
+        <div class="muted">Opções de pagamento</div>
+        <a class="paypal-link" href="https://paypal.me/MiguelBraz10" target="_blank" rel="noopener" aria-label="Pagar com PayPal">
+          <!-- Ícone simples PP em SVG -->
+          <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M7.5 21H5.8a.8.8 0 0 1-.79-.93l1.57-10A1.6 1.6 0 0 1 8.17 8.7h5.3c3.07 0 5.91 1.9 5.22 5.24-.52 2.49-2.74 3.89-5.2 3.89h-1.9l-.34 2.18A1.6 1.6 0 0 1 9.67 21H7.5Z" fill="#002C8A"/></svg>
+          Pagar com PayPal
+        </a>
+        <button class="btn btn-primary" onclick="goPayPal()">Ir para paypal.me/MiguelBraz10</button>
+      </div>
+      <button class="btn btn-ghost" onclick="scrollToId('servicos')">+ Serviços</button>
+    </div>
+  </aside>
+
+  <script>
+    // Formatadores em pt-PT
+    const fmtEUR = new Intl.NumberFormat('pt-PT', { style:'currency', currency:'EUR' });
+    const fmtINT = new Intl.NumberFormat('pt-PT');
+
+    // Conversão Delux: 1 € = 12 000 $
+    const POINTS_PER_EURO = 12000;
+
+    // Estado do carrinho
+    const CART = {};
+
+    const priceSmall = (e)=>`(${fmtINT.format(Math.round(e*POINTS_PER_EURO))} $ Delux)`;
+
+    // Preenche pontos nos cartões
+    document.querySelectorAll('.card').forEach(card=>{
+      const price = Number(card.dataset.preco);
+      const small = card.querySelector('.price small');
+      if(small) small.textContent = priceSmall(price);
+    });
+
+    function add(id){
+      const card = document.querySelector(`.card[data-id="${id}"]`);
+      if(!card) return;
+      const nome = card.dataset.nome;
+      const preco = Number(card.dataset.preco);
+      CART[id] ??= { nome, preco, qty:0 };
+      CART[id].qty++;
+      renderCart();
+    }
+    function removeOne(id){ if(!CART[id]) return; CART[id].qty--; if(CART[id].qty<=0) delete CART[id]; renderCart(); }
+    function addOne(id){ if(!CART[id]) return; CART[id].qty++; renderCart(); }
+    function clearCart(){ for(const k in CART) delete CART[k]; renderCart(); }
+
+    function renderCart(){
+      const box = document.getElementById('cartItems');
+      box.innerHTML = '';
+      let total = 0;
+      Object.entries(CART).forEach(([id, item])=>{
+        const row = document.createElement('div');
+        row.className = 'row';
+        const subtotal = item.preco * item.qty;
+        total += subtotal;
+        row.innerHTML = `
+          <div>
+            <strong>${item.nome}</strong>
+            <div class="muted">${fmtEUR.format(item.preco)} · ${priceSmall(item.preco)}</div>
+          </div>
+          <div class="qty">
+            <button aria-label="Diminuir" onclick="removeOne('${id}')">−</button>
+            <strong>${item.qty}</strong>
+            <button aria-label="Aumentar" onclick="addOne('${id}')">+</button>
+          </div>
+          <div style="text-align:right">
+            <div><strong>${fmtEUR.format(subtotal)}</strong></div>
+            <div class="muted">${fmtINT.format(Math.round(subtotal*POINTS_PER_EURO))} $</div>
+          </div>`;
+        box.appendChild(row);
+      });
+      document.getElementById('totalEur').innerHTML = fmtEUR.format(total).replace(' ', '&nbsp;');
+      document.getElementById('totalPts').textContent = fmtINT.format(Math.round(total*POINTS_PER_EURO)) + ' $';
+    }
+
+    function goPayPal(){ window.open('https://paypal.me/MiguelBraz10', '_blank', 'noopener'); }
+
+    function fakeCheckout(){
+      const totalText = document.getElementById('totalEur').textContent;
+      const ptsText = document.getElementById('totalPts').textContent;
+      alert(`Obrigado! O teu pedido foi registado.\nTotal: ${totalText}\nPontos: ${ptsText}`);
+    }
+
+    function scrollToId(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'}); }
+
+    // Animações reveal ao scroll
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }});
+    }, { threshold: .15 });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    // Ano no rodapé
+    document.getElementById('ano').textContent = new Date().getFullYear();
+
+    // Info simples
+    function info(titulo){ alert(`${titulo}\n\nContacta-nos para agendar.\nEmail: miguelbraztab@gmail.com\nWhatsApp: +351 969 356 582`); }
+
+    // Render inicial do carrinho
+    renderCart();
+  </script>
+</body>
+</html>
